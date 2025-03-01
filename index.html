@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин Кросівок</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-6xl mx-auto bg-white p-6 shadow-lg rounded-lg">
+        <h1 class="text-2xl font-bold mb-4 text-center">Виберіть кросівки</h1>
+        <div class="grid grid-cols-5 gap-4" id="sneakers-list">
+            <!-- Сюди додаються кросівки -->
+        </div>
+        <button id="submit-btn" class="mt-4 w-full bg-blue-500 text-white py-2 rounded">Зберегти вибране</button>
+    </div>
+    
+    <script>
+        const sneakers = [
+            { id: 1, name: "Nike Air Max 270", image: "https://images.unsplash.com/photo-1595950653360-d6bdc40efeab", price: 120 },
+            { id: 2, name: "Adidas Ultraboost 21", image: "https://images.unsplash.com/photo-1575537302964-218b60c0c568", price: 150 },
+            { id: 3, name: "Puma RS-X", image: "https://images.unsplash.com/photo-1586201375761-83865001e31b", price: 100 },
+            { id: 4, name: "New Balance 574", image: "https://images.unsplash.com/photo-1598550476432-9f3c9c38a36a", price: 110 },
+            { id: 5, name: "Reebok Classic Leather", image: "https://images.unsplash.com/photo-1595950653153-d6bdc40efeab", price: 90 },
+            { id: 6, name: "Nike Air Force 1", image: "https://images.unsplash.com/photo-1607330287491-47b7dbc94b1c", price: 130 },
+            { id: 7, name: "Adidas NMD R1", image: "https://images.unsplash.com/photo-1578120018489-b7b2b9e5f8d8", price: 140 },
+            { id: 8, name: "Vans Old Skool", image: "https://images.unsplash.com/photo-1562183241-b937e952711d", price: 80 },
+            { id: 9, name: "Converse Chuck Taylor", image: "https://images.unsplash.com/photo-1617990802773-3e92f5481caa", price: 70 },
+            { id: 10, name: "Asics Gel-Kayano", image: "https://images.unsplash.com/photo-1598550476753-9f3c9c38a36a", price: 160 },
+            { id: 11, name: "Nike Zoom Pegasus", image: "https://images.unsplash.com/photo-1598550476432-9f3c9c38a36a", price: 115 },
+            { id: 12, name: "Adidas Yeezy Boost 350", image: "https://images.unsplash.com/photo-1595950653360-d6bdc40efeab", price: 220 },
+            { id: 13, name: "Puma Future Rider", image: "https://images.unsplash.com/photo-1578120018489-b7b2b9e5f8d8", price: 105 },
+            { id: 14, name: "New Balance 997H", image: "https://images.unsplash.com/photo-1607330287491-47b7dbc94b1c", price: 125 },
+            { id: 15, name: "Reebok Club C 85", image: "https://images.unsplash.com/photo-1562183241-b937e952711d", price: 95 }
+        ];
+        
+        const container = document.getElementById("sneakers-list");
+        sneakers.forEach(sneaker => {
+            const div = document.createElement("div");
+            div.className = "p-4 border rounded-lg cursor-pointer hover:bg-gray-200";
+            div.innerHTML = `<img src="${sneaker.image}" class="w-full h-40 object-cover rounded"><p class="text-center mt-2 font-bold">${sneaker.name}</p><p class="text-center text-gray-700">Ціна: ${sneaker.price}$</p>`;
+            div.onclick = () => div.classList.toggle("bg-green-200");
+            div.dataset.id = sneaker.id;
+            div.dataset.price = sneaker.price;
+            container.appendChild(div);
+        });
+        
+        document.getElementById("submit-btn").onclick = () => {
+            const selected = [...document.querySelectorAll(".bg-green-200")].map(el => ({ id: el.dataset.id, price: el.dataset.price }));
+            fetch("save.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ selected })
+            }).then(res => res.text()).then(alert);
+        };
+    </script>
+</body>
+</html>
